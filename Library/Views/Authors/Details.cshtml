@@ -1,0 +1,18 @@
+@{
+  Layout = "_Layout";
+}
+
+@using Library.Models
+@model Library.Models.Author
+
+<h2>Author Details</h2>
+
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
+
+<h2>Books: </h2>
+<ul>
+@foreach (AuthorBook join in Model.AuthorBookJoinEntities)
+{
+  <li>@join.Book.Title</li>
+}
+</ul>
