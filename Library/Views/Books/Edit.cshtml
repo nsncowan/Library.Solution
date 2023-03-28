@@ -2,6 +2,7 @@
   Layout = "_Layout";
 }
 
+@using Library.Models
 @model Library.Models.Book
 
 <h2>Edit</h2>
@@ -15,6 +16,40 @@
   @Html.LabelFor(model => model.Title)
   @Html.EditorFor(model => model.Title)
 
-  <input type="submit" value="Save"/>
+        <input type="submit" value="Save"/>
 }
+
+<ul>
+  @foreach (AuthorBook join in Model.AuthorBookJoinEntities)
+  {
+          <li>@join.Author.Name 
+      @using (Html.BeginForm("DeleteJoin", "Books"))
+      {
+        @Html.Hidden("joinId", @join.AuthorBookId)
+                    <input type="submit" value="Remove" />
+      }
+          </li>
+  }
+</ul>
+
+@using (Html.BeginForm("AddBookAuthors", "Books"))
+{
+  @Html.HiddenFor(model => model.BookId)
+        <label for="authorId">Author ID: </label>
+        <input list="authors" name="author" id="authorId">
+        <span id='name-field'></span>
+        <datalist id="authors"> 
+    @foreach (Author author in ViewBag.AuthorList)
+    {
+                <option value=@author.AuthorId>@author.Name</option>
+    }
+        </datalist>
+        <br>
+
+        <input type="submit" value="Add Author" />
+}
+
 <p>@Html.ActionLink("Back to list", "Index")</p>
+
+
+<script type=text/javascript src='~/js/scripts.js'></script>

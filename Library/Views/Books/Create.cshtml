@@ -12,44 +12,22 @@
   @Html.LabelFor(model => model.Title)
   @Html.TextBoxFor(model => model.Title, new { required="required"})
 
-  <label for="authorId">Author ID: </label>
-  <input list="authors" name="author" id="authorId">
-  <span id='name-field'></span>
-  <datalist id="authors"> 
+      <label for="authorId">Author ID: </label>
+      <input list="authors" name="author" id="authorId">
+      <span id='name-field'></span>
+      <datalist id="authors"> 
     @foreach (Author author in ViewBag.AuthorList)
     {
-        <option value=@author.AuthorId>@author.Name</option>
+                <option value=@author.AuthorId>@author.Name</option>
     }
-  </datalist>
-  <br>
-  <br>
-  <input type="submit" value="Add new book" class="btn btn-primary" />
+      </datalist>
+      <br>
+      <br>
+      <input type="submit" value="Add new book" class="btn btn-primary" />
 }
 
   <p>@Html.ActionLink("Show all books", "Index")</p>
 
-  <script type=text/javascript>
-    function fetchAuthorName(){
-      let authorId = document.getElementById("authorId").value;
-      fetch(`/Authors/GetAuthorName/${authorId}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(response => {
-        let author = JSON.parse(response);
-        let nameField = document.getElementById('name-field');
-        nameField.innerText = author.Name;
-      })
-    }
 
-    document.getElementById("authorId").addEventListener("change", e=> {
-      let authorId = document.getElementById("authorId").value;
-      if (authorId) {
-        fetchAuthorName();
-      }
-    })
-  </script>
+
+<script type=text/javascript src='~/js/scripts.js'></script>
