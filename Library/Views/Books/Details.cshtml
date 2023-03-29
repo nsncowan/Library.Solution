@@ -8,7 +8,14 @@
 <h2>Book Details</h2>
 
 <h3>@Html.DisplayNameFor(model => model.Title): @Html.DisplayFor(model => model.Title)</h3>
-<h2>Authors: @foreach(AuthorBook join in Model.AuthorBookJoinEntities)
-{
-  <li>@join.Author.Name</li>
-}
+<h3>Authors: </h3>
+<ul>
+  @foreach(AuthorBook join in Model.AuthorBookJoinEntities)
+  {
+    <li>@join.Author.Name</li>
+  }
+</ul>
+
+<p>@Html.ActionLink("Show all books", "Index")</p>
+<p>@Html.ActionLink("Edit book", "Edit", new {id = Model.BookId})</p>
+<p>@Html.ActionLink("Delete book", "Delete", new {id = Model.BookId})</p>

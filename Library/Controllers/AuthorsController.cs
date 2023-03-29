@@ -12,7 +12,7 @@ namespace Library.Controllers
   public class AuthorsController : Controller
   {
     private readonly LibraryContext _db;
-  
+
     public AuthorsController(LibraryContext db)
     {
       _db = db;
@@ -29,6 +29,7 @@ namespace Library.Controllers
     {
       Author thisAuthor = _db.Authors
                           .Include(author => author.AuthorBookJoinEntities)
+                          .ThenInclude(join => join.Book)
                           .FirstOrDefault(author => author.AuthorId == id);
       return View(thisAuthor);
     }
@@ -55,22 +56,20 @@ namespace Library.Controllers
     }
     public void AddBookToAuthor(int bookId, int authorId)
     {
-      #nullable enable
+#nullable enable
       AuthorBook? joinEntity = _db.AuthorBooks.FirstOrDefault(join => join.BookId == bookId && join.AuthorId == authorId);
       if (joinEntity == null && authorId != 0 && bookId != 0)
-      #nullable disable
+#nullable disable
       {
-        _db.AuthorBooks.Add(new AuthorBook() {BookId = bookId, AuthorId = authorId});
+        _db.AuthorBooks.Add(new AuthorBook() { BookId = bookId, AuthorId = authorId });
         _db.SaveChanges();
       }
     }
-    public ActionResult GetAuthorName(int authorId)
+    public ActionResult GetAuthorName(int id)
     {
       // List<Author> authors = _db.Authors.ToList().Where(author => author.AuthorId == authorId).ToList();
-      Author thisAuthor = _db.Authors.FirstOrDefault(author => author.AuthorId == authorId);
+      Author thisAuthor = _db.Authors.FirstOrDefault(author => author.AuthorId == id);
       var json = JsonSerializer.Serialize(thisAuthor);
-      Console.WriteLine(authorId);
-      Console.WriteLine(thisAuthor.Name);
       return Json(json);
     }
   }

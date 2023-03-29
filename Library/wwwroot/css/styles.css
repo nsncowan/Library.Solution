@@ -1,0 +1,14 @@
+#authorId {
+  width: 3rem;
+}
+
+div#footer {
+  position:fixed;
+  bottom:0px;
+  left:0px;
+  width:100%;
+  color:#E6B17E;
+  background:#7C4E29;
+  padding:8px;
+  text-align: center;
+}

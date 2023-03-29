@@ -9,10 +9,14 @@
 
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
 
-<h2>Books: </h2>
+<h3>Books: </h3>
 <ul>
 @foreach (AuthorBook join in Model.AuthorBookJoinEntities)
 {
-  <li>@join.Book.Title</li>
+  <li>@Html.ActionLink($"{join.Book.Title}","Details", "Books", new { id = join.BookId})</li>
 }
 </ul>
+
+<p>@Html.ActionLink("Show all authors", "Index")</p>
+<p>@Html.ActionLink("Edit author", "Edit", new {id = Model.AuthorId})</p>
+<p>@Html.ActionLink("Delete author", "Delete", new {id = Model.AuthorId})</p>
