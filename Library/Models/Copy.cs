@@ -8,5 +8,7 @@ namespace Library.Models
     public int BookId { get; set; }
     public Book Book { get; set; }
     public Checkout Checkout { get; set; }
+    public ApplicationUser User { get; set; }
+
   }
 }

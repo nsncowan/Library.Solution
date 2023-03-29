@@ -4,22 +4,32 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 
 namespace Library.Controllers
 {
+  [Authorize]
   public class BooksController : Controller
   {
     private readonly LibraryContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public BooksController(LibraryContext db)
+    public BooksController(UserManager<ApplicationUser> userManager, LibraryContext db)
     {
+      _userManager = userManager;
       _db = db;
     }
 
-    public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Book> model = _db.Books
+                            .Where(entry => entry.User.Id == currentUser.Id)
                             .Include(book => book.AuthorBookJoinEntities)
                             .ToList();
       return View(model);
@@ -32,11 +42,18 @@ namespace Library.Controllers
     }
 
     [HttpPost]
-    public ActionResult Create(string title, int author)
+    public ActionResult Create(string title, int author, int copies)
     {
       Book thisBook = new Book();
       thisBook.Title = title;
       _db.Books.Add(thisBook);
+      _db.SaveChanges();
+
+      for(int i=1;i<=copies;i++){
+        Copy thisCopy = new Copy();
+        thisCopy.BookId = thisBook.BookId;
+        _db.Copies.Add(thisCopy);
+      }
       _db.SaveChanges();
 
       AddAuthorToBook(thisBook.BookId, author);

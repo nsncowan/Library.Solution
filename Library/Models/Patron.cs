@@ -7,5 +7,7 @@ namespace Library.Models
     public int PatronId { get; set; }
     public string Name { get; set; }
     public List<Checkout> CheckoutJoinEntities { get; }
+    public ApplicationUser User { get; set; }
+
   }
 }

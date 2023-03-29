@@ -5,21 +5,30 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Library.Controllers
 {
+  [Authorize]
   public class AuthorsController : Controller
   {
     private readonly LibraryContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AuthorsController(LibraryContext db)
+    public AuthorsController(UserManager<ApplicationUser> userManager, LibraryContext db)
     {
+      _userManager = userManager;
       _db = db;
     }
-    public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Author> model = _db.Authors
+                            .Where(entry => entry.User.Id == currentUser.Id)
                             .Include(author => author.AuthorBookJoinEntities)
                             .ToList();
       return View(model);

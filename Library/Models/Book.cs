@@ -11,5 +11,7 @@ namespace Library.Models
     public string Title { get; set; }
     public List<Copy> Copies { get; set; }
     public List<AuthorBook> AuthorBookJoinEntities { get; }
+    public ApplicationUser User { get; set; }
+
   }
 }
