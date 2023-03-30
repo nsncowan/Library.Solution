@@ -9,6 +9,5 @@ namespace Library.Models
     public Book Book { get; set; }
     public Checkout Checkout { get; set; }
     public ApplicationUser User { get; set; }
-
   }
 }

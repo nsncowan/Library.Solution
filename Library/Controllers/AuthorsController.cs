@@ -23,12 +23,20 @@ namespace Library.Controllers
       _userManager = userManager;
       _db = db;
     }
-    public async Task<ActionResult> Index()
+    // public async Task<ActionResult> Index()
+    // {
+    //   string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //   ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+    //   List<Author> model = _db.Authors
+    //                         .Where(entry => entry.User.Id == currentUser.Id)
+    //                         .Include(author => author.AuthorBookJoinEntities)
+    //                         .ToList();
+    //   return View(model);
+    // }
+
+    public ActionResult Index()
     {
-      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Author> model = _db.Authors
-                            .Where(entry => entry.User.Id == currentUser.Id)
                             .Include(author => author.AuthorBookJoinEntities)
                             .ToList();
       return View(model);

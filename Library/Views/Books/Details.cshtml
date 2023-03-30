@@ -15,6 +15,9 @@
     <li>@join.Author.Name</li>
   }
 </ul>
+<p>@Html.ActionLink("Check out Book", "Checkout", new {id = Model.BookId})</p>
+
+<br>
 
 <p>@Html.ActionLink("Show all books", "Index")</p>
 <p>@Html.ActionLink("Edit book", "Edit", new {id = Model.BookId})</p>

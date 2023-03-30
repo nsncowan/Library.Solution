@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 
 namespace Library.Controllers
@@ -24,12 +26,20 @@ namespace Library.Controllers
       _db = db;
     }
 
-    public async Task<ActionResult> Index()
+    // public async Task<ActionResult> Index()
+    // {
+    //   string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //   ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+    //   List<Book> model = _db.Books
+    //                         .Where(entry => entry.User.Id == currentUser.Id)
+    //                         .Include(book => book.AuthorBookJoinEntities)
+    //                         .ToList();
+    //   return View(model);
+    // }
+
+    public ActionResult Index()
     {
-      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Book> model = _db.Books
-                            .Where(entry => entry.User.Id == currentUser.Id)
                             .Include(book => book.AuthorBookJoinEntities)
                             .ToList();
       return View(model);
@@ -127,9 +137,38 @@ namespace Library.Controllers
     [HttpPost]
     public ActionResult AddBookAuthors(int bookId, int author)
     {
-
       AddAuthorToBook(bookId, author);
       return RedirectToAction("Details", new { id = bookId });
+    }
+
+    public ActionResult Checkout(int id)
+    {
+      ViewBag.PatronList = new SelectList(_db.Patrons, "PatronId", "Name");
+      Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
+      return View(thisBook);
+    }
+
+    [HttpPost]
+    public ActionResult Checkout(int bookId, int patronList)
+    {
+      // int bookId = book.BookId;
+      Copy thisCopy = _db.Copies
+                          .Include(copy => copy.Checkout)
+                          .FirstOrDefault(copy => copy.BookId == bookId && copy.Checkout == null);
+      int copyId = thisCopy.CopyId;
+      // _db.Checkouts.Add(new Checkout() {CopyId = thisCopy.CopyId, PatronId = patronId, DueDate = new DateTime(2023, 4, 20) });
+      // _db.SaveChanges();
+      // return RedirectToAction("Index");
+
+      #nullable enable
+      Checkout? joinEntity = _db.Checkouts.FirstOrDefault(join => join.CopyId == copyId && join.PatronId == patronList);
+      if (joinEntity == null && copyId != 0 && patronList != 0)
+      #nullable disable
+      {
+        _db.Checkouts.Add(new Checkout() { CopyId = copyId, PatronId = patronList });
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Index");
     }
   }
 }
