@@ -1,0 +1,27 @@
+@{
+  Layout = "_Layout";
+}
+
+@using Library.Models
+@model Library.Models.Patron
+
+<h2>Patron Details</h2>
+
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)</h3>
+<h3>Checked Out Books</h3>
+<ul>
+  @foreach(Checkout checkout in Model.CheckoutJoinEntities)
+  {
+    <li>
+       @using (Html.BeginForm("ReturnBook", "Books"))
+      {
+        @Html.Hidden("checkoutId", @checkout.CheckoutId)
+        @Html.ActionLink($"{checkout.Copy.Book.Title}", "Details", "Books", new { id = checkout.Copy.BookId})
+        <input type="submit" value="Return Book" class = "btn btn-warning"/>
+      }
+    @*@Html.ActionLink("Return Book", "ReturnBook", "Books", new { id = checkout.CheckoutId }, new {@class = "btn btn-warning"})*@
+    </li>
+    <br>
+  }
+</ul>
+

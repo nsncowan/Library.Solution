@@ -136,7 +136,6 @@ namespace Library.Controllers
       _db.AuthorBooks.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
-
     }
 
     [HttpPost]
@@ -174,6 +173,16 @@ namespace Library.Controllers
         _db.SaveChanges();
       }
       return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult ReturnBook(int checkoutId)
+    {
+      Checkout thisCheckout = _db.Checkouts.FirstOrDefault(checkout => checkout.CheckoutId == checkoutId);
+      int thisPatronId = thisCheckout.PatronId;
+      _db.Checkouts.Remove(thisCheckout);
+      _db.SaveChanges();
+      return RedirectToAction("Details", "Patrons", new {id = thisPatronId});
     }
   }
 }

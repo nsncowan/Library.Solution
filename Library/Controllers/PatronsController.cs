@@ -50,6 +50,7 @@ namespace Library.Controllers
       Patron thisPatron = _db.Patrons
                               .Include(patron => patron.CheckoutJoinEntities)
                               .ThenInclude(checkout => checkout.Copy)
+                              .ThenInclude(copy=>copy.Book)
                               .FirstOrDefault(patron => patron.PatronId == id);
       return View(thisPatron);
     }
