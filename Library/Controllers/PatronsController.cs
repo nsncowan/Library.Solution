@@ -44,5 +44,14 @@ namespace Library.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+
+    public ActionResult Details(int id)
+    {
+      Patron thisPatron = _db.Patrons
+                              .Include(patron => patron.CheckoutJoinEntities)
+                              .ThenInclude(checkout => checkout.Copy)
+                              .FirstOrDefault(patron => patron.PatronId == id);
+      return View(thisPatron);
+    }
   }
 }

@@ -15,6 +15,9 @@
     <li>@join.Author.Name</li>
   }
 </ul>
+<h3>Available Copies: @Model.Copies.Where(copy => copy.Checkout == null).ToList().Count</h3>
+<h3>Total Copies: @Model.Copies.Count</h3>
+
 <p>@Html.ActionLink("Check out Book", "Checkout", new {id = Model.BookId})</p>
 
 <br>

@@ -85,9 +85,14 @@ namespace Library.Controllers
     public ActionResult Details(int id)
     {
       Book thisBook = _db.Books
+                          .Include(book => book.Copies)
+                          .ThenInclude(copy => copy.Checkout)
                           .Include(book => book.AuthorBookJoinEntities)
                           .ThenInclude(join => join.Author)
                           .FirstOrDefault(book => book.BookId == id);
+
+      //Count the number of Checkouts that are null 
+      // *THIS ALSO WORKS : ViewBag.AvailableCopies = thisBook.Copies.Where(copy => copy.Checkout == null).ToList().Count;
       return View(thisBook);
     }
 
