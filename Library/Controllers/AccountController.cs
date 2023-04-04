@@ -29,7 +29,7 @@ namespace Library.Controllers
       return View();
     }
 
-        [HttpPost]
+    [HttpPost]
     public async Task<ActionResult> Register (RegisterViewModel model)
     {
       if (!ModelState.IsValid)
@@ -38,7 +38,7 @@ namespace Library.Controllers
       }
       else
       {
-        ApplicationUser user = new ApplicationUser { UserName = model.Email };
+        ApplicationUser user = new ApplicationUser { Email = model.Email, UserName = model.UserName };
         IdentityResult result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
@@ -87,6 +87,11 @@ namespace Library.Controllers
     {
       await _signInManager.SignOutAsync();
       return RedirectToAction("Index");
+    }
+
+    public IActionResult AccessDenied()
+    {
+      return View();
     }
   }
 }
