@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Library.Controllers
 {
   // [Authorize]
+  [Authorize]
   public class BooksController : Controller
   {
     private readonly LibraryContext _db;
@@ -44,7 +45,7 @@ namespace Library.Controllers
                             .ToList();
       return View(model);
     } 
-    [Authorize(Roles = "Librarian")]
+    
     public ActionResult Create()
     {
       ViewBag.AuthorList = _db.Authors.ToList();
