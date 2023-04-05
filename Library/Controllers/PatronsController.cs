@@ -45,14 +45,36 @@ namespace Library.Controllers
       return RedirectToAction("Index");
     }
 
-    public ActionResult Details(int id)
+    public async Task<ActionResult> Details()
     {
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      Console.WriteLine("LOOK HERE");
+      Console.WriteLine(userId);
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       Patron thisPatron = _db.Patrons
-                              .Include(patron => patron.CheckoutJoinEntities)
-                              .ThenInclude(checkout => checkout.Copy)
-                              .ThenInclude(copy=>copy.Book)
-                              .FirstOrDefault(patron => patron.PatronId == id);
+                            .Include(patron => patron.CheckoutJoinEntities)
+                            .ThenInclude(checkout => checkout.Copy)
+                            .ThenInclude(copy=>copy.Book)
+                            .FirstOrDefault(patron => patron.User.Id == currentUser.Id);
       return View(thisPatron);
+
+
+
+      // List<Book> userBooks = _db.Copies
+      //                         .Where(copy => copy.User.Id == currentUser.Id)
+      //                         .Include(copy => copy.Checkout)
+      //                         .ToList();
+      // return View(userBooks);
     }
+
+  //    public ActionResult Details(int id)
+  //   {
+  //     Patron thisPatron = _db.Patrons
+  //                             .Include(patron => patron.CheckoutJoinEntities)
+  //                             .ThenInclude(checkout => checkout.Copy)
+  //                             .ThenInclude(copy=>copy.Book)
+  //                             .FirstOrDefault(patron => patron.PatronId == id);
+  //     return View(thisPatron);
+  // }
   }
-}
+  }

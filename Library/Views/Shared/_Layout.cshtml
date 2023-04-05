@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/styles.css">
   </head>
   <body>
+  <div class="container">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Library</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -24,6 +25,7 @@
         <li class="nav-item active">
           @if (User.Identity.IsAuthenticated)
           {
+            <a class="nav-link" href="/Patrons/Details">Your Account</a> 
             <a class="nav-link" href="/Account/LogOff">Log Out</a>
           }
           else
@@ -34,6 +36,7 @@
       </ul>
     </div>
   </nav>
+  </div>
     <div class="container">
     @RenderBody()
     </div>
