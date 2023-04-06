@@ -59,7 +59,6 @@ namespace Library.Controllers
       return View(thisPatron);
 
 
-
       // List<Book> userBooks = _db.Copies
       //                         .Where(copy => copy.User.Id == currentUser.Id)
       //                         .Include(copy => copy.Checkout)
